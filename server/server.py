@@ -2,7 +2,7 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Station, Bus
+from database_setup import Base, Station, Bus
 
 import json
 import httplib2
@@ -31,15 +31,15 @@ def indexForStation():
 
 # Endpoint for buses data
 @app.route('/json/buses')
-def busesJSON):
+def busesJSON():
     buses = session.query(Bus).all()
     return jsonify(buses = [b.serialize for b in buses])
 
 # Endpoint for stations data
 @app.route('/json/stations')
-def stationsJSON):
+def stationsJSON():
     stations = session.query(Station).all()
-    return jsonify(buses = [b.serialize for b in buses])
+    return jsonify(stations = [s.serialize for s in stations])
 
 if __name__ == '__main__':
     app.debug = True
