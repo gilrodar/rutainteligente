@@ -16,14 +16,14 @@ class Bus(Base):
     latitude = Column(Float, nullable=False)
     next_station = Column(Integer, nullable=False)
     prev_station = Column(Integer, nullable=False)
-    time_to_next_station = Column(String(50), nullable=False)
-    capacity = Column(Integer, nullable=False)
+    time_to_next_station = Column( Integer, nullable=False)
+    room = Column(Integer, nullable=False)
 
     @property
     def serialize(self):
        """Return object data in easily serializeable format"""
        return {
-           'capacity'                 : self.capacity,
+           'room'                     : self.room,
            'timetonextstation'        : self.time_to_next_station,
            'prevstation'              : self.prev_station,
            'nextstation'              : self.next_station,

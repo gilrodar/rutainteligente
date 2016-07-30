@@ -41,6 +41,16 @@ def stationsJSON():
     stations = session.query(Station).all()
     return jsonify(stations = [s.serialize for s in stations])
 
+# Create new busand assign the id
+@app.route('/bus/create', methods = ['POST'])
+def newBus():
+    if request.method == 'POST':
+        lat = request.form['lat']
+        return "received post"
+    else:
+        return "not post reques"
+
+
 if __name__ == '__main__':
     app.debug = True
     app.run(host = '0.0.0.0', port = 8080)
