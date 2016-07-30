@@ -5,7 +5,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
- 
+
 Base = declarative_base()
 
 class Bus(Base):
@@ -18,7 +18,7 @@ class Bus(Base):
     prev_station = Column(Double, nullable=False)
     time_to_next_station = Column(String(50), nullable=False)
     capacity = Column(Integer, nullable=False)
- 
+
     @property
     def serialize(self):
        """Return object data in easily serializeable format"""
@@ -31,11 +31,11 @@ class Bus(Base):
            'longitude'                : self.longitude,
            'id'                       : self.id,
        }
-   
 
-class Stations(Base):
-    __tablename__ = 'stations'
-   
+
+class Station(Base):
+    __tablename__ = 'station'
+
     id = Column(Integer, primary_key=True)
     longitude = Column(Double, nullable=False)
     latitude = Column(Double,  nullable=False)
@@ -56,6 +56,6 @@ class Stations(Base):
 
 
 engine = create_engine('sqlite:///stationsandbuses.db')
- 
+
 
 Base.metadata.create_all(engine)
