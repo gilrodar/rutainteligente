@@ -14,8 +14,8 @@ class Bus(Base):
     id = Column(Integer, primary_key=True)
     longitude = Column(Float, nullable=False)
     latitude = Column(Float, nullable=False)
-    next_station = Column(Float, nullable=False)
-    prev_station = Column(Float, nullable=False)
+    next_station = Column(Integer, nullable=False)
+    prev_station = Column(Integer, nullable=False)
     time_to_next_station = Column(String(50), nullable=False)
     capacity = Column(Integer, nullable=False)
 
