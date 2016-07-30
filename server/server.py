@@ -18,7 +18,7 @@ def index():
 
 
 @app.route('/estacionaria')
-def index():
+def indexForStation():
     return "pagina principal para web sin interaccion"
 
 if __name__ == '__main__':
