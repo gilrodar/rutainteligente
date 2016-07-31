@@ -28,47 +28,27 @@ def simulatePeople(room):
 
 if __name__ == '__main__':
     index = 0
-    percentage = random.randint(6, 30)
-    new = True
-    stack = [1,2,3,4,5,6,7,8]
-    eta = None
-    nextStation = 8
-    prevStation = 9
-    while new:
-	lat, lon = getNewCoords(index)
-	percentage = simulatePeople(percentage)
-        if os.path.isfile("id.txt"):
-            indexFile = open('id.txt','r')
-            identification = int(indexFile.readline())
-            print "Update bus"
-            payload = {
-                "id" : identification,
-                "lat": lat,
-                "lon": lon,
+    while index < 3:
+        lat, lon = getNewCoords(index)
+        percentage = random.randint(6,100)
+        prevStation = random.randint(2,9)
+        number=random.randint(0,2)
+        if number:
+            nextStation = prevStation + 1
+        else:
+            nextStation = prevStation - 1
+        print index
+        percentage = simulatePeople(percentage)
+        print "New bus"
+        payload = {
+                "lat": float(lat),
+                "lon": float(lon),
                 "cap": percentage,
                 "prevstation": prevStation,
                 "nextstation": nextStation,
-            }
-            print payload
-            r = requests.post(url+"bus/update", data = payload)
-            print r.text
-        else:
-            print "New bus"
-            payload = {
-                "lat": lat,
-                "lon": lon,
-                "cap": percentage,
-                "prevstation": 9,
-                "nextstation": 8,
-            }
-            print payload
-            r = requests.post(url+"bus/create", data = payload)
-            f = open('id.txt','w')
-            data = str(r.text).split(',')
-            f.write(data[0])
-            f.close()
-        new = False
-        time.sleep(4)
+                }
+        print payload
+        r = requests.post(url+"bus/create", data = payload)
         index += 1
 
 

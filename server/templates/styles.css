@@ -1,0 +1,51 @@
+html{
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+body{
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+	    /*min-height: 100vh;*/
+	    flex-direction: column;
+      }
+#map {
+	height: 100%;
+  resize: 100%;
+	}
+
+footer{
+  resize: 30px;
+}
+
+/*footer {
+      padding-left: 300px;
+    }
+
+@media only screen and (max-width : 992px) {
+  footer {
+    padding-left: 0;
+  }*/
+
+#imagen1{
+  height: auto; 
+  width: auto;
+  max-width: 10%;
+  max-height: 10%; 
+}
+.imagen2{
+  height: auto; 
+  width: auto;
+  max-width: 7%;
+  max-height: 7%; 
+}
+
+.nav{
+  height: auto; 
+  width: auto; 
+  max-width: 100%; 
+  max-height: 40%;
+}
+

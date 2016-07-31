@@ -65,8 +65,7 @@ session = DBSession()
 
 @app.route('/')
 def index():
-    return "pagina principal para web con interaccion"
-
+    return render_template('index.html')
 
 @app.route('/estacionaria')
 def indexForStation():
@@ -147,19 +146,24 @@ def newBus():
         return "not post reques"
 
 # Update coords of the bus
-@app.route('/bus/update', methods = ['POST'])
-def editBus():
+@app.route('/bus/<int:bus_id>/update/', methods = ['POST'])
+def editBus(bus_id):
     if request.method == 'POST':
-        nextStation = session.query(Station).filter_by(id = request.form['nextstation']).one()
-        bus = session.query(Bus).filter_by(id = request.form['id']).one()
+        bus = session.query(Bus).filter_by(id = bus_id).one()
+        nextStation = session.query(Station).filter_by(id = bus.next_station).one()
         eta = getETABetween(float(request.form['lat']), float(request.form['lon']),
                             nextStation.latitude, nextStation.longitude)
-        bus.longitude = float(request.form['lon']),
-        bus.latitude = float(request.form['lat']),
-        bus.next_station = request.form['nextstation'],
-        bus.prev_station = request.form['prevstation'],
+        if request.form['lon']:
+            bus.longitude = float(request.form['lon']),
+        if request.form['lat']:
+            bus.latitude = float(request.form['lat']),
+        if request.form['nextstation']:
+            bus.next_station = request.form['nextstation'],
+        if request.form['prevstation']:
+            bus.prev_station = request.form['prevstation'],
+        if request.form['cap']:
+            bus.room = request.form['cap']
         bus.time_to_next_station = eta,
-        bus.room = request.form['cap']
         session.add(bus)
         session.commit()
         return str(eta)

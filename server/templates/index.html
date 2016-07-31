@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+  <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><!--ajax-->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <title>Ruta Inteligente</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">     
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script><!--JQuery-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css"><!--Materialize -->
+    <script type="text/javascript" src="functions.js"></script>
+    <script type="text/javascript" src="functionsbus.js"></script>
+    <script type="text/javascript" src="http://materializecss.com/templates/starter-template/js/init.js"></script><!--Agregar libreria-->
+
+  </head>
+  <body>
+  		
+		    <div id="map"></div>
+		    
+		    <script>
+				// This example displays a marker at the center of Australia.
+				// When the user clicks the marker, an info window opens.
+				var busMarker = [];
+				var i;
+				function initMap() { //Mapa
+				  var ruta = {lat: 19.446774, lng: -99.153273};
+				  var map = new google.maps.Map(document.getElementById('map'), {
+				    zoom: 12,
+				    center: ruta
+				 	 });
+
+				  //Polilíneas para marcar rutas
+				  var flightPlanCoordinates = [
+				  	{lat: 19.42337, lng: -99.1624},
+				  	{lat: 19.423971, lng: -99.162387},
+				  	{lat:19.424161, lng: -99.162643},
+				  	{lat: 19.4278, lng: -99.16105},
+				  	{lat: 19.43306, lng: -99.1588},
+				  	{lat: 19.43615, lng: -99.15722},
+				  	{lat: 19.44041, lng: -99.15553},
+				  	{lat: 19.4431, lng: -99.15459},
+				  	{lat: 19.44695, lng: -99.15302},
+				  	{lat: 19.455318, lng: -99.151550},
+				  	{lat: 19.45688, lng: -99.14915},
+				  	{lat: 19.458191, lng: -99.147258},
+				  	{lat: 19.45966, lng: -99.14651},
+				  	{lat: 19.46244, lng: -99.14403},
+				  	{lat: 19.46883, lng: -99.1388},
+				  	{lat: 19.47661, lng: -99.13247},
+				  	{lat: 19.48247, lng: -99.12774},
+				  	{lat: 19.48636, lng: -99.12432},
+				  	{lat: 19.491234, lng: -99.120552},
+				  	{lat: 19.495309, lng: -99.119275},
+				  	{lat: 19.497454, lng: -99.118782},
+				  	{lat:19.498556, lng: -99.118632},
+				  	{lat:19.498829, lng: -99.118943},
+				  	{lat:19.498748, lng: -99.119286},
+				  	{lat: 19.49678, lng: -99.11972}
+				  ];
+
+				   var flightPath = new google.maps.Polyline({
+						    path: flightPlanCoordinates,
+						    geodesic: true,
+						    strokeColor: '#f44336',
+						    strokeOpacity: 1.0,
+						    strokeWeight: 5
+						  });
+
+					flightPath.setMap(map);
+
+				  //Cajas de Texto
+				  var contentString =
+				  	 '<div id="content">'+
+					      '<div id="siteNotice">'+
+					      '</div>'+
+					      '<h1 id="firstHeading" class="firstHeading">Hola</h1>' //Texto
+				      '</div>';
+
+				  var infowindow = new google.maps.InfoWindow({
+				    content: contentString
+				  });
+
+				  //Marcador
+				  var image = 'imagenes/bus.png';
+				  function bus(){
+								  for(i = 0; i<flightPlanCoordinates.length; i++){
+										  busMarker[i] = new google.maps.Marker({
+										  	position: flightPlanCoordinates[i],
+										    map: map,
+										    icon: image,
+										    
+										  });
+										  
+									}
+								}
+				window.setTimeout(bus(i), 500);
+							
+				  //Marcador estaciones
+				  console.log(latitud, longitud);
+
+				  
+				  	var EstacionMarket0 = new google.maps.Marker({
+				  		position: {lat: latitud[0], lng: longitud[0]}, 
+				  	 	map: map,
+				  	 	icon:{ url: "imagenes/indios_verdes.png"}					  	 
+				    });
+				    var EstacionMarket1 = new google.maps.Marker({
+				  		position: {lat: latitud[1], lng: longitud[1]}, 
+				  	 	map: map,
+				  	 	icon:{ url: "imagenes/18marzo.png"}
+				   });
+					var EstacionMarket2 = new google.maps.Marker({
+				  		position: {lat: latitud[2], lng: longitud[2]}, 
+				  	 	map: map,
+				  	 	icon:{ url: "imagenes/euzkaro.png"}
+				   });
+					var EstacionMarket3 = new google.maps.Marker({
+				  		position: {lat: latitud[3], lng: longitud[3]}, 
+				  	 	map: map,
+				  	 	icon:{ url: "imagenes/potreto.png"}
+				   });
+					var EstacionMarket4 = new google.maps.Marker({
+				  		position: {lat: latitud[4], lng: longitud[4]}, 
+				  	 	map: map,
+				  	 	icon:{ url: "imagenes/la_raza.png"}
+				   });
+					var EstacionMarket5 = new google.maps.Marker({
+				  		position: {lat: latitud[5], lng: longitud[5]}, 
+				  	 	map: map,
+				  	 	icon:{ url: "imagenes/circuito.png"}
+
+				   });
+					var EstacionMarket6 = new google.maps.Marker({
+						position: {lat: latitud[6], lng: longitud[6]},
+						map: map,
+						icon:{url: "imagenes/san_simon.png"}
+					});
+					var EstacionMarket7 = new google.maps.Marker({
+						position: {lat: latitud[7], lng: longitud[7]},
+						map: map,
+						icon:{url: "imagenes/manuel_gonzalez.png"}
+					});
+					var EstacionMarket8 = new google.maps.Marker({
+						position: {lat: latitud[8], lng: longitud[8]},
+						map: map,
+						icon:{url: "imagenes/buenavista.png"}
+					});		
+				
+				}	
+				
+		    </script>
+
+		    <!--Side nav-->
+		   
+		    <ul class="nav">
+		    	<div class="container"> 
+		    		<div class="row">
+			    		<li class="col s3" id="Ruta"></li>
+			    		<img class="col s5" id="imagen1" src="http://3.bp.blogspot.com/-LGGdFFx46Cc/TWiul15ZxJI/AAAAAAAAAzg/pw2nIEd4PIQ/s400/mb-laraza.png">
+		    		</div>
+		    		
+		    		<div class="row">
+		    		<table>
+		    		<tbody>
+		    			<tr>
+					    	<td class="col s4" id="direccion"></td>
+					    	<td class="col s4" id="minutos"></td>
+					    	<td class="col s4" id="ocupacion"></td>
+				    	</tr>
+			    	</tbody>
+			    	</table>
+			    	</div>
+			    </div>
+			</ul>
+		
+
+  			<!--Api Google maps-->
+		    <script async defer
+		        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAY0bRPEa7vzAXHKyB8XbmYSmIRcNd0bwU&signed_in=true&callback=initMap">
+		    </script>
+		    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script><!--Marerialize -->
+  </body>
+  <main>
+
+		<footer class="page-footer light-blue">
+		    <div class="footer-copyright">
+		        <div class="container center">
+		        	<img class="imagen2" src="imagenes/LOGOTIPO_TRANSPARENTE.png">
+		            HackingRute, 2016
+		            Web
+		        </div>
+		    </div>
+		</footer>
+<!--   <footer class="page-footer #42a5f5 blue lighten-1" >
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text" id="Ruta"></h5>
+                <table>
+			        <tbody>
+			          <tr>
+			            <td id="direccion"></td>
+			            <td id="minutos"></td>
+			            <td id="ocupacion"></td>
+			          </tr>
+			        </tbody>
+			      </table>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+             By: Ruta Inteligente 2016
+            </div>
+          </div>
+   </footer> -->
+   </main>
+</html>
