@@ -37,13 +37,6 @@ if __name__ == '__main__':
     while new:
 	lat, lon = getNewCoords(index)
 	percentage = simulatePeople(percentage)
-        payload = {
-            "lat": float(lat),
-            "lon": float(lon),
-        }
-        print payload
-        r = requests.get(url+"json/closest", params= payload)
-        print r.json()['id']
         if os.path.isfile("id.txt"):
             indexFile = open('id.txt','r')
             identification = int(indexFile.readline())
