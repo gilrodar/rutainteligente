@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for, f
 from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Station, Bus
-
 import json
 import httplib2
 from flask import make_response
@@ -93,7 +92,7 @@ def stationsJSON():
 def newBus():
     if request.method == 'POST':
         nextStation = session.query(Station).filter_by(id = request.form['nextstation']).one()
-        eta = getETABetween([request.form['lat'], request.form['lon']],
+        eta = getETABetween([float(request.form['lat']), float(request.form['lon'])],
                 [nextStation.latitude, nextStation.longitude])
         bus = Bus (
 	    longitude = request.form['lon'],
@@ -103,7 +102,11 @@ def newBus():
 	    time_to_next_station = eta,
 	    room = request.form['cap']
 	)
-        return "1"
+        session.add(bus)
+        session.flush()
+        index = bus.id
+        session.commit()
+        return str(index)
     else:
         return "not post reques"
 
@@ -134,10 +137,7 @@ def getETABetween(locationOne, locationTwo):
     h = httplib2.Http()
     response, content = h.request(url, 'GET')
     result = json.loads(content)
-    print url
-    print result
-    # eta = result["rows"][0]["elements"][0]["duration"]["value"]
-    eta = 0
+    eta = result["rows"][0]["elements"][0]["duration"]["value"]
     return eta
 
 if __name__ == '__main__':
