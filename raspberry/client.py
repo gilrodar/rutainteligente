@@ -2,7 +2,7 @@ import requests
 import time
 import os.path
 
-url = "http://192.168.119.90:8080/bus/"
+url = "http://192.168.119.180:8080/bus/"
 
 
 def getNewCoords(index):

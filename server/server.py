@@ -103,8 +103,7 @@ def newBus():
 	    time_to_next_station = eta,
 	    room = request.form['cap']
 	)
-        print bus.id
-        return "received post"
+        return "1"
     else:
         return "not post reques"
 
@@ -112,20 +111,33 @@ def newBus():
 @app.route('/bus/update', methods = ['POST'])
 def editBus():
     if request.method == 'POST':
-        lat = request.form['lat']
-        return "received post"
+        nextStation = session.query(Station).filter_by(id = request.form['nextstation']).one()
+        bus = session.query(Bus).filter_by(id = request.form['id']).one()
+        eta = getETABetween([request.form['lat'], request.form['lon']],
+                [nextStation.latitude, nextStation.longitude])
+        bus.longitude = request.form['lon'],
+        bus.latitude = request.form['lat'],
+        bus.next_station = request.form['prevstation'],
+        bus.prev_station = request.form['nextstation'],
+        bus.time_to_next_station = eta,
+        bus.room = request.form['cap']
+        session.add(bus)
+        session.commit()
+        return eta
     else:
         return "not post reques"
 
 
 def getETABetween(locationOne, locationTwo):
     google_key_secret ="AIzaSyDafqyfJNYmaMFDciA8WESdmulQ5dObn_U"
-    url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s,%s&destinations=%s,%s&mode=driving&language=es-ES&key=%s" % (locationOne[0], locationOne[1],
-        locationTwo[0], locationTwo[1], google_key_secret)
+    url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s,%s&destinations=%s,%s&mode=driving&language=es-ES&key=%s" % (locationOne[0], locationOne[1],locationTwo[0], locationTwo[1], google_key_secret)
     h = httplib2.Http()
     response, content = h.request(url, 'GET')
     result = json.loads(content)
-    eta = result["rows"][0]["elements"][0]["duration"]["value"]
+    print url
+    print result
+    # eta = result["rows"][0]["elements"][0]["duration"]["value"]
+    eta = 0
     return eta
 
 if __name__ == '__main__':
