@@ -26,8 +26,8 @@ urls = [
         ]
 
 for i in range(0,9):
-    station = Station(longitude = longitudes[i],
-            latitude = latitudes[i],
+    station = Station(longitude = float(longitudes[i]),
+            latitude = float(latitudes[i]),
             name = names[i],
             url_img  = urls[i])
     session.add(station)

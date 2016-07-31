@@ -95,7 +95,6 @@ def closestJSON():
     url += '%s,%s' % (request.args.get('lat'), request.args.get('lon') )
     url += '&mode=walking&language=es-ES&key=AIzaSyDafqyfJNYmaMFDciA8WESdmulQ5dObn_U'
 
-
     h = httplib2.Http()
     response, content = h.request(url, 'GET')
     result = json.loads(content)
@@ -104,16 +103,16 @@ def closestJSON():
     indexOfMinimal = 0
     index = 1
     for r in rows:
-	current = r['elements'][0]['distance']['value']
-	if minimal is not None:
-	    if current < minimal:
-		minimal = current
-		indexOfMinimal = index
-	else:
-	    minimal = current
-	    indexOfMinimal = index
-	index += 1
-    return jsonify({'id': indexOfMinimal})
+        current = r['elements'][0]['distance']['value']
+        if minimal is not None:
+            if current < minimal:
+                minimal = current
+                indexOfMinimal = index
+        else:
+            minimal = current
+            indexOfMinimal = index
+        index += 1
+    return jsonify(id = indexOfMinimal)
 
 
 
@@ -129,16 +128,16 @@ def stationsJSON():
 def newBus():
     if request.method == 'POST':
         nextStation = session.query(Station).filter_by(id = request.form['nextstation']).one()
-        eta = getETABetween([float(request.form['lat']), float(request.form['lon'])],
-                [nextStation.latitude, nextStation.longitude])
+        eta = getETABetween(float(request.form['lat']), float(request.form['lon']),
+                            nextStation.latitude, nextStation.longitude)
         bus = Bus (
-	    longitude = float(request.form['lon']),
-	    latitude = float(request.form['lat']),
-	    next_station = int(request.form['nextstation']),
-	    prev_station = int(request.form['prevstation']),
-	    time_to_next_station = int(eta),
-	    room = int(request.form['cap'])
-	)
+            longitude = float(request.form['lon']),
+            latitude = float(request.form['lat']),
+            next_station = request.form['nextstation'],
+            prev_station = request.form['prevstation'],
+            time_to_next_station = eta,
+            room = request.form['cap']
+        )
         session.add(bus)
         session.flush()
         index = bus.id
@@ -151,17 +150,16 @@ def newBus():
 @app.route('/bus/update', methods = ['POST'])
 def editBus():
     if request.method == 'POST':
-        session.rollback()
         nextStation = session.query(Station).filter_by(id = request.form['nextstation']).one()
         bus = session.query(Bus).filter_by(id = request.form['id']).one()
-        eta = getETABetween([float(request.form['lat']), float(request.form['lon'])],
-                            [nextStation.latitude, nextStation.longitude])
+        eta = getETABetween(float(request.form['lat']), float(request.form['lon']),
+                            nextStation.latitude, nextStation.longitude)
         bus.longitude = float(request.form['lon']),
         bus.latitude = float(request.form['lat']),
-        bus.next_station = int(request.form['nextstation']),
-        bus.prev_station = int(request.form['prevstation']),
-        bus.time_to_next_station = int(eta),
-        bus.room = int(request.form['cap'])
+        bus.next_station = request.form['nextstation'],
+        bus.prev_station = request.form['prevstation'],
+        bus.time_to_next_station = eta,
+        bus.room = request.form['cap']
         session.add(bus)
         session.commit()
         return str(eta)
@@ -169,9 +167,9 @@ def editBus():
         return "not post reques"
 
 
-def getETABetween(locationOne, locationTwo):
+def getETABetween(latOne, lonOne, latTwo, lonTwo):
     google_key_secret ="AIzaSyDafqyfJNYmaMFDciA8WESdmulQ5dObn_U"
-    url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s,%s&destinations=%s,%s&mode=driving&language=es-ES&key=%s" % (locationOne[0], locationOne[1],locationTwo[0], locationTwo[1], google_key_secret)
+    url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s,%s&destinations=%s,%s&mode=driving&language=es-ES&key=%s" % (latOne, lonOne,latTwo, lonTwo, google_key_secret)
     h = httplib2.Http()
     response, content = h.request(url, 'GET')
     result = json.loads(content)
