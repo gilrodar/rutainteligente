@@ -93,7 +93,7 @@ def closestJSON():
 	    url += '|'
     url += '&destinations='
     url += '%s,%s' % (request.args.get('lat'), request.args.get('lon') )
-    url += '&mode=driving&language=es-ES&key=AIzaSyDafqyfJNYmaMFDciA8WESdmulQ5dObn_U'
+    url += '&mode=walking&language=es-ES&key=AIzaSyDafqyfJNYmaMFDciA8WESdmulQ5dObn_U'
 
 
     h = httplib2.Http()
@@ -132,18 +132,18 @@ def newBus():
         eta = getETABetween([float(request.form['lat']), float(request.form['lon'])],
                 [nextStation.latitude, nextStation.longitude])
         bus = Bus (
-	    longitude = request.form['lon'],
-	    latitude = request.form['lat'],
-	    next_station = request.form['prevstation'],
-	    prev_station = request.form['nextstation'],
-	    time_to_next_station = eta,
-	    room = request.form['cap']
+	    longitude = float(request.form['lon']),
+	    latitude = float(request.form['lat']),
+	    next_station = int(request.form['nextstation']),
+	    prev_station = int(request.form['prevstation']),
+	    time_to_next_station = int(eta),
+	    room = int(request.form['cap'])
 	)
         session.add(bus)
         session.flush()
         index = bus.id
         session.commit()
-        return str(index)
+        return str(index) +","+str(eta)
     else:
         return "not post reques"
 
@@ -151,19 +151,20 @@ def newBus():
 @app.route('/bus/update', methods = ['POST'])
 def editBus():
     if request.method == 'POST':
+        session.rollback()
         nextStation = session.query(Station).filter_by(id = request.form['nextstation']).one()
         bus = session.query(Bus).filter_by(id = request.form['id']).one()
-        eta = getETABetween([request.form['lat'], request.form['lon']],
-                [nextStation.latitude, nextStation.longitude])
-        bus.longitude = request.form['lon'],
-        bus.latitude = request.form['lat'],
-        bus.next_station = request.form['prevstation'],
-        bus.prev_station = request.form['nextstation'],
-        bus.time_to_next_station = eta,
-        bus.room = request.form['cap']
+        eta = getETABetween([float(request.form['lat']), float(request.form['lon'])],
+                            [nextStation.latitude, nextStation.longitude])
+        bus.longitude = float(request.form['lon']),
+        bus.latitude = float(request.form['lat']),
+        bus.next_station = int(request.form['nextstation']),
+        bus.prev_station = int(request.form['prevstation']),
+        bus.time_to_next_station = int(eta),
+        bus.room = int(request.form['cap'])
         session.add(bus)
         session.commit()
-        return eta
+        return str(eta)
     else:
         return "not post reques"
 
