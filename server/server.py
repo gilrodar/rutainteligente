@@ -80,6 +80,43 @@ def busesJSON():
     buses = session.query(Bus).all()
     return jsonify(buses = [b.serialize for b in buses])
 
+# Endpoint for cercano
+@app.route('/json/closest', methods = ['POST'])
+@crossdomain(origin='*')
+def closestJSON():
+    stations = session.query(Station).all()
+    identification = 1
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='
+    for s in stations:
+	url += '%s,%s' % (s.latitude, s.longitude)
+	if s.id != 9:
+	    url += '|'
+    url += '&destinations='
+    url += '%s,%s' % (float(request.form['lat']), float(request.form['lon']) )
+    url += '&mode=driving&language=es-ES&key=AIzaSyDafqyfJNYmaMFDciA8WESdmulQ5dObn_U'
+
+
+    h = httplib2.Http()
+    response, content = h.request(url, 'GET')
+    result = json.loads(content)
+    rows = result['rows']
+    minimal = None
+    indexOfMinimal = 0
+    index = 1
+    for r in rows:
+	current = r['elements'][0]['distance']['value']
+	if minimal is not None:
+	    if current < minimal:
+		minimal = current
+		indexOfMinimal = index
+	else:
+	    minimal = current
+	    indexOfMinimal = index
+	index += 1
+    return jsonify({'id': indexOfMinimal})
+
+
+
 # Endpoint for stations data
 @app.route('/json/stations')
 @crossdomain(origin='*')
@@ -139,6 +176,8 @@ def getETABetween(locationOne, locationTwo):
     result = json.loads(content)
     eta = result["rows"][0]["elements"][0]["duration"]["value"]
     return eta
+
+
 
 if __name__ == '__main__':
     app.debug = True
