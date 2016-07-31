@@ -11,6 +11,6 @@ if __name__ == '__main__':
             "lon": -99.13600,
             }
     print payload
-    r = requests.post(url+"closest", data = payload)
+    r = requests.get(url+"closest", params= payload)
     print str(r.text)
 

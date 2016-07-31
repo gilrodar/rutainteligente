@@ -81,7 +81,7 @@ def busesJSON():
     return jsonify(buses = [b.serialize for b in buses])
 
 # Endpoint for cercano
-@app.route('/json/closest', methods = ['POST'])
+@app.route('/json/closest')
 @crossdomain(origin='*')
 def closestJSON():
     stations = session.query(Station).all()
@@ -92,7 +92,7 @@ def closestJSON():
 	if s.id != 9:
 	    url += '|'
     url += '&destinations='
-    url += '%s,%s' % (float(request.form['lat']), float(request.form['lon']) )
+    url += '%s,%s' % (request.args.get('lat'), request.args.get('lon') )
     url += '&mode=driving&language=es-ES&key=AIzaSyDafqyfJNYmaMFDciA8WESdmulQ5dObn_U'
 
 
